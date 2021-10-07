@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test sortowania kart z Wisconsin</title>
+    <style>
+       .container {
+            margin-top: 15pt;
+            margin-left: 15%;
+            margin-right: 15%;
+        }
+        .btn {
+            width: 200px;
+            padding: 15px;
+            margin: 15px;
+            background: rgb(255, 255, 255);
+            color: dodgerblue;
+            border: solid 1px dodgerblue;
+            cursor: pointer;
+            transition: all 0.38s ease-in-out;
+        }
+        button:hover {
+            background: dodgerblue;
+            color: rgb(217, 225, 236);
+        }
+    </style>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container" id="cont">
+        <h2>Test Stroop'a</h2>
+        <p>Test Ridleya Stroopa służy do mierzenia funkcji poznawczych człowieka, koncentracji i samokontroli.</p>
+        <p>Istnieje wiele wersji tego testu, ale niemal wszystkie opierają się na prezentowaniu słów oznaczających barwy.</p>
+        <p>Ponieważ większość ludzi posiada wyuczoną tendencję czytania tekstu, nazwanie koloru jakim dane słowo zostało napisane będzie wymagać dodatkowego wysiłku wyhamowania tej tendencji, a co za tym idzie dodatkowego czasu. </p>
+        <p>Test w zaprezentowanej tu wersji składa się z dwóch części.</p>
+        <p>Pierwsza część polega na nazwaniu koloru czcionki 12 neutralnych słów, jakie pojawią się na ekranie. Np.:  </p>
+        <p>Druga część jest bardzo podobna, ale tym razem słowa będą oznaczać barwy. Np.:</p>
+        <p>Rejestrowana jest różnica czasu wykonania i popełnionych błędów pomiędzy częścią drugą a pierwszą (zakłada się, że część pierwsza jest łatwiejsza, ponieważ nie wymaga hamowania).</p>
+        <p>Przed rozpoczęciem testu zostaniesz poproszony/a o wyrażenie zgody na skorzystanie z Twojego mikrofonu. </p>
+        <br>
+        <br>
+        <form role="form">
+            <div class="form-group">
+                <button class="btn" type="submit" id="btnProba">Rozpocznij test</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        const str = window.location.href;
+        let st = str.lastIndexOf('/')
+        let end = str.indexOf('?')
+        let base = str.slice(0, st);
+        let query = str.slice(end);
+        document.getElementById('btnProba').addEventListener("click", (e) =>{
+            e.preventDefault();
+            window.location.replace(base+ '/stroop_2'+query);
+        })
+    </script>
+</body>
+</html>

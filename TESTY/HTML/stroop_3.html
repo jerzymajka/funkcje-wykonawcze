@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test sortowania kart z Wisconsin</title>
+    <style>
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-container1 {
+          display: grid;
+          grid-template-columns: auto auto auto auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-item {
+          background-color: rgba(255, 255, 255, 0.8);
+          border: 0px solid rgba(255, 255, 255, 0.479);
+          padding: 0px;
+          font-size: 30px;
+          text-align: center;
+        }
+        .container {
+        margin-top: 15pt;
+        margin-left: 15%;
+        margin-right: 15%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 15px;
+        background: rgb(255, 255, 255);
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+       button:hover {
+        background: dodgerblue;
+        color: rgb(217, 225, 236);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cont">
+      <div id='wyniki'> <h2>Test Stroop'a - część druga</h2>
+        <p>Część druga różni się od części pierwszej tylko tym, że słowa oznaczają kolory. Nie należy ich jednak czytać, tylko nazwać kolor czcionki, jakimi zostały wydrukowane.</p>
+        <p>Aby rozpocząć kliknij <span style="font-size:125%; color: rgb(85, 106, 226);">Start</span>.</p>
+        <p>Gdy zakończysz, kliknij przycisk <span style="font-size:125%; color: rgb(85, 106, 226);">Gotowe</span> na dole strony. </p></div>
+      </div>  
+        <div id="word" style="background-color: rgb(255, 255, 255);"></div>
+        <div id="result"></div>
+        <div id="guziki" style='text-align:center'><button class="btn" id="btnStart">Start</button> <button class="btn" id="btnGotowe">Gotowe</button></div>
+  <script>
+    const words = ['żółty', 'zielony', 'czerwony', 'czarny', 'niebieski', 'biały', 'pomarańczowy', 'fioletowy', 'brązowy', 'różowy'];
+    const str = window.location.href;
+    let st = str.lastIndexOf('/')
+    let end = str.indexOf('?')
+    let base = str.slice(0, st);
+    let query = str.slice(end);
+    let czasStart = 0;
+    let licznikBlad = 0;
+    const colors = ['yellow', 'green', 'red', 'black', 'blue'];
+    const kolorySkr = ['żół', 'ziel', 'czer','czar', 'nieb'];
+    const koloryPel = ['żółty', 'zielony', 'czerwony','czarny', 'niebieski'];
+    const colorIndex = [0, 0, 0, 0, 0];
+    const colorArr = [];
+    const wordIndex = [0, 0, 0, 0, 0];
+    const wordArr = [];
+    const resultArr =[[' - ', ' - ', ' - ', ' - ', ' - '],
+    [' - ', ' - ', ' - ', ' - ', ' - '],
+    [' - ', ' - ', ' - ', ' - ', ' - ']];
+    const resultColor = [['white', 'white', 'white', 'white', 'white'], 
+    ['white', 'white', 'white', 'white', 'white'],
+    ['white', 'white', 'white', 'white', 'white']];
+    const btnStart = document.getElementById('btnStart');
+    const btnGotowe = document.getElementById('btnGotowe');
+    const word = document.getElementById('word');
+    const wyniki = document.getElementById('wyniki');
+    const guziki = document.getElementById('guziki');
+    const randIndex = ()=>{
+      for(let i = 0; i<5; i++){
+        colorIndex[i]=Math.floor(Math.random()*5);
+        wordIndex[i]=Math.floor(Math.random()*10);
+      }
+    };
+    const slucham = ()=>{
+      for(let i=0; i<3; i++){
+        randIndex();
+        colorArr[i]= Array.from(colorIndex);
+        wordArr[i]= Array.from(wordIndex);
+        html += mojHtml(i);
+      }
+      word.innerHTML=html; 
+    }
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+    var grammar = '#JSGF V1.0; grammar colors; public <color> = ' + koloryPel.join(' | ') + ' ;'
+    var recognition = new SpeechRecognition();
+    var speechRecognitionList = new SpeechGrammarList();
+    speechRecognitionList.addFromString(grammar, 1);
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = false;
+    recognition.lang = 'pl';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    const mojHtml = function(i){
+        return `<h1 style="color: rgb(255, 255, 255); text-align:center;" font size="+5">
+          <span style="color:${colors[colorArr[i][0]]}">${words[wordArr[i][0]]}</span> <span style="color:${resultColor[i][0]}">${resultArr[i][0]}</span>
+          <span style="color:${colors[colorArr[i][1]]}">${words[wordArr[i][1]]}</span> <span style="color:${resultColor[i][1]}">${resultArr[i][1]}</span>
+          <span style="color:${colors[colorArr[i][2]]}">${words[wordArr[i][2]]}</span> <span style="color:${resultColor[i][2]}">${resultArr[i][2]}</span>
+          <span style="color:${colors[colorArr[i][3]]}">${words[wordArr[i][3]]}</span> <span style="color:${resultColor[i][3]}">${resultArr[i][3]}</span>
+          <span style="color:${colors[colorArr[i][4]]}">${words[wordArr[i][4]]}</span> <span style="color:${resultColor[i][4]}">${resultArr[i][4]}</span></h1>`
+    }
+  const htmlWyniki = `<h2>Test Stroop'a, część druga - przegląd wyników</h2>
+  <p>Jak w przypadku części pierwszej - sprawdź swoje wyniki</p>
+  <p>Jeśli wszystko się zgadza, naciśnij przycisk "Gotowe", jeśli nie - powtórz test.</p>`
+  const htmlGuziki = `<button class="btn" id="btnPowtorz">Powtórz test</button> <button class="btn" id="btnKoniec">Gotowe</button>`
+  let html = '';
+  let moj_color = '';    
+  document.addEventListener('DOMContentLoaded', (event) => {
+    slucham();
+  })
+  btnStart.addEventListener('click', ()=>{
+    czasStart = Date.now();
+    recognition.start();
+  })
+  btnGotowe.addEventListener('click', ()=>{
+    let czas = Date.now()-czasStart;
+    recognition.stop();
+    wyniki.innerHTML = htmlWyniki;
+    guziki.innerHTML = htmlGuziki;
+    setTimeout(()=>{
+    const rezultatArr = moj_color.split(' ');
+    let len = rezultatArr.length;
+    let n = 0;
+    for(let i = 0; i<3; i++){
+      for(let j = 0; j<5; j++){
+        if(n<len){
+          resultArr[i][j]='(' + rezultatArr[n]+ ')';
+          resultColor[i][j]='black';
+          if(!rezultatArr[n].includes(kolorySkr[colorArr[i][j]])){
+            resultArr[i][j]='(' + rezultatArr[n]+ ')';
+            resultColor[i][j]='red';
+            licznikBlad++;
+          }
+          n++;
+        }else{
+          resultArr[i][j]='(brak)';
+          resultColor[i][j]='red';
+          licznikBlad++;
+        }
+      }
+    }
+    html = '';
+    for(let i=0; i<3; i++){
+       html += mojHtml(i);
+    }
+      word.innerHTML=html;
+      document.getElementById('result').innerHTML = `<h3>Podsumowanie:</h3>
+                                    <p>Ilość błędów: ${licznikBlad}</p>
+                                    <p>Czas w sekundach: ${Math.floor(czas/1000)}</p>`;
+      const btnKoniec = document.getElementById('btnKoniec');
+      const btnPowtorz = document.getElementById('btnPowtorz');
+      btnKoniec.addEventListener('click', (e)=>{
+        e.preventDefault();
+        window.location.replace(base+ '/testy'+query);
+      });
+      btnPowtorz.addEventListener('click', ()=>{
+        location.reload();
+      })
+    }, 300)
+  })  
+      recognition.onresult = function(event) {
+        moj_color =  event.results[0][0].transcript;
+      }
+      recognition.onspeechend = function() {
+        
+        recognition.stop()
+      }
+      
+      recognition.onnomatch = function(event) {
+        console.log("Kolor z poza listy");
+      }
+      recognition.onerror = function(event) {
+        console.log('Błąd rozpoznawania mowy ' + event.error);
+      }
+
+</script>
+</body>
+</html>

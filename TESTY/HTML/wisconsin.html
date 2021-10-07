@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test sortowania kart z Wisconsin</title>
+    <style>
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-container1 {
+          display: grid;
+          grid-template-columns: auto auto auto auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-item {
+          background-color: rgba(255, 255, 255, 0.8);
+          border: 0px solid rgba(255, 255, 255, 0.479);
+          padding: 0px;
+          font-size: 30px;
+          text-align: center;
+        }
+        .container {
+        margin: 100px;
+        margin-right: 15%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 25px;
+        background: #fff;
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+        .name {
+        font-size: large;
+        color: rgb(4, 65, 85);
+        }
+        .name:hover {
+        background: dodgerblue;
+        }
+        button:hover {
+        background: dodgerblue;
+        color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cont">
+    <div class="grid-container">
+        <div class="grid-item"><img id = "gif"src="./redtriangle1_test.gif" alt=""></div>
+    </div>
+    <h1 style="color: rgb(255, 255, 255); text-align: center;" id="komunikat" >Dobrze</h1>
+    <div class="grid-container1">
+        <div class="grid-item" id="daa" onclick="getId(this)"><img src="./redtriangle1_test.gif" alt=""></div>
+        <div class="grid-item" id="adb" onclick="getId(this)"><img src="./greenstar2_test.gif" alt=""></div>
+        <div class="grid-item" id="bcc" onclick="getId(this)"><img src="./yellowcross3_test.gif" alt=""></div>  
+        <div class="grid-item" id="cbd" onclick="getId(this)"><img src="./bluecircle4_test.gif" alt=""></div>
+    </div> 
+    </div>
+    <script>
+      const gifName = ["GreenTriangle3.gif", "GreenTriangle4.gif", "YellowTriangle2.gif", "YellowTriangle4.gif", 
+      "BlueTriangle2.gif", "BlueTriangle3.gif", "RedStar3.gif", "RedStar4.gif",
+      "YellowStar1.gif", "YellowStar4.gif", "BlueStar1.gif", "BlueStar3.gif", "RedCross2.gif", "RedCross4.gif",
+      "GreenCross1.gif", "GreenCross4.gif", "BlueCross1.gif", "BlueCross2.gif", 
+      "RedCircle2.gif", "RedCircle3.gif", "GreenCircle1.gif","GreenCircle3.gif","YellowCircle1.gif","YellowCircle2.gif"];
+      const gifSymbol = ['aac', 'aad', 'bab', 'bad',
+      'cab', 'cac', 'ddc', 'ddd', 
+      'bda', 'bdd', 'cda', 'cdc', 'dcb', 'dcd',
+      'aca', 'acd','cca', 'ccb',
+      'dbb', 'dbc', 'aba', 'abc', 'bba', 'bbb'];
+      const regula = {color:0, ksztalt:1, liczba:2};
+      const sekwencja = [['color', 3], ['ksztalt', 4], ['color', 3],['liczba', 5], ['ksztalt', 4], ['liczba', 5]];
+      let licznikTrafiony = 0;
+      let licznikSekwencja = 0;
+      let licznikBlad = 0;
+      let aktualnyRegula = Math.floor(Math.random() * 6);
+      const zgodnoscReguly=(regula, index, karta)=>{
+          return (gifSymbol[index][regula]==karta[regula]) ? true : false;
+      }
+      const href = window.location.href;
+      const gotowe = function(){
+          console.log(href);
+          window.location.replace(href.replace('wisconsint', 'testy'));
+      }
+      const gif = document.getElementById("gif");
+      const komunikat = document.getElementById("komunikat");
+      const start = Date.now();
+      let gifIndex  = Math.floor(Math.random() * 24);
+      gif.src = "./"+gifName[gifIndex];
+      const getId = (karta)=>{
+          if(zgodnoscReguly(regula[sekwencja[aktualnyRegula][0]], gifIndex, karta.id)){
+              licznikTrafiony++;
+              if(licznikTrafiony > sekwencja[aktualnyRegula][1]){
+                  licznikTrafiony = 0;
+                  licznikSekwencja++;
+                  aktualnyRegula++;
+                  if(aktualnyRegula == 6){
+                      aktualnyRegula = 0;
+                  }
+                  if(licznikSekwencja == 6){
+                      let czas = Date.now()-start; 
+                    fetch(href, {
+                        method: 'post',
+                        body:    JSON.stringify({bledy: licznikBlad, czas: Math.floor(czas/1000)}),
+                        headers: { 'Content-Type': 'application/json' },
+                    }).then(res => {
+                            if(res.status==200){
+                                document.getElementById('cont').innerHTML = `<h1>Twoje rezultaty:</h1>
+                                    <h2>Ilość błędów: ${licznikBlad}</h2>
+                                    <h2>Czas w sekundach: ${Math.floor(czas/1000)}</h2>
+                                    <div class="form-group">
+                                    <button class="btn" type="submit" onclick="gotowe()">Gotowe</button></div>`;
+                            }
+                        }).catch((err)=>{
+                            document.getElementById('cont').innerHTML = `<h2>Wystąpił błąd</h2>
+                                    <h3>${err}</h3>
+                                    <h3>Spróbuj powtórzyć test, jeśli to nie pomoże skontaktuj się ze mną</h2>
+                                    <h3>jerzymajka67@gmail.com</h2>`
+                        })
+                  }
+              }
+              komunikat.style="color: rgb(15, 238, 23); text-align: center;" 
+              komunikat.innerText = "Dobrze";
+          }else{
+              licznikTrafiony = 0;
+              licznikBlad++;
+              komunikat.style="color: rgb(248, 62, 37); text-align: center;"
+              komunikat.innerText = "Błąd";
+          }
+          gifIndex  = Math.floor(Math.random() * 24);
+          gif.src = "./"+gifName[gifIndex];
+      }
+    </script>
+</body>
+</html>

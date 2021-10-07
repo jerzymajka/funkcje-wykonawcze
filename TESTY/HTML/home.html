@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badanie Funkcji Hamowania</title>
+    <style>
+        .container {
+             margin-top: 15pt;
+             margin-left: 10%;
+             margin-right: 10%;
+         }
+         .btn {
+             width: 200px;
+             padding: 15px;
+             margin: 15px;
+             background: rgb(255, 255, 255);
+             color: dodgerblue;
+             border: solid 1px dodgerblue;
+             cursor: pointer;
+             transition: all 0.38s ease-in-out;
+         }
+         button:hover {
+             background: dodgerblue;
+             color: rgb(217, 225, 236);
+         }
+     </style>
+</head>
+<body>
+    <h2>Badanie Funkcji Hamowania testem Stroop'a i Sortowania Kart z Wisconsin</h2>
+    <div class="container" id="cont">
+        <h3>Witaj na stronie „Badanie funkcji hamowania”.</h3>
+        <p>Nazywam się Jerzy Majka i jestem studentem 5 roku psychologii na SWPS w Warszawie. W ramach pracy magisterskiej pod kierunkiem dr Magdaleny Przedniczek prowadzę badanie nad wpływem alkoholu na funkcje wykonawcze człowieka, a zwłaszcza na funkcję hamowania. </p>
+        <p>Wyniki badania mogłyby stać się przyczynkiem w lepszym zrozumieniu powiązań pomiędzy funkcjami hamowania a popadaniem i wychodzeniem z alkoholizmu, a poprzez to również stać się pomocne w opracowaniu terapii poznawczo-behawioralnej opartej na wzmacnianiu w/w funkcji. </p>
+        <p>Niniejsze badania składa się z krótkiej ankiety i dwóch testów: Testu Stroop’a i Testu Sortowania Kart z Wisconsin. </p>
+        <p>Warunkiem wzięcia udziału jest ukończone 18 lat, zdolność rozróżniania kolorów oraz dostęp do komputera stacjonarnego lub laptopa z przeglądarką Chrome, FireFox lub Edge wyposażonego w mikrofon. Konieczny jest również dostęp do Internetu.</p>
+        <p>Badanie jest nieszkodliwe, nie wymaga również podawania jakichkolwiek informacji poufnych. </p>
+        <p>Całość badania to około 15 min., ale niekoniecznie należy wykonywać wszystkie zadania za jednym razem. </p>
+        <p>Jeśli jesteś zainteresowany wzięciem udziału w badaniu, kliknij przycisk „Zarejestruj się”. Jeśli już jesteś zarejestrowany, kliknij „Zaloguj”.</p>
+        <p>Jeśli potrzebujesz dodatkowych informacji, napisz do mnie na adres: jmajka1.@st.swps.edu.pl.</p>
+        <div id="guziki" style='text-align:center'><button class="btn" id="btnSign">Zarejestruj się</button> <button class="btn" id="btnLog">Zaloguj</button></div>
+    </div>
+    <script>
+        document.getElementById('btnSign').addEventListener("click", (e) =>{
+            e.preventDefault();
+            window.location.replace('/signup');
+        });
+        document.getElementById('btnLog').addEventListener("click", (e) =>{
+            e.preventDefault();
+            window.location.replace('/login');
+        });
+    </script>
+</body>
+</html>

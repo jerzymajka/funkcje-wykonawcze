@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+        .container {
+        margin: 100px;
+        margin-right: 30%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 25px;
+        background: #fff;
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+        .name {
+        font-size: large;
+        color: rgb(4, 65, 85);
+        }
+        .name:hover {
+        background: dodgerblue;
+        }
+        button:hover {
+        background: dodgerblue;
+        color: #fff;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badanie Funkcji Hamowania</title>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container">
+        <h1>Badanie Funkcji Hamowania testem Stroop'a i Sortowania Kart z Wisconsin</h1>
+        <form role="form">
+            <div class="form-group">
+                <input class="in" type="email" name="email" id="email" placeholder="E-mail" required>
+            </div>
+            <div class="form-group">
+                <input class="in" type="password" name="pwd" id="pwd" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <button class="btn" type="submit" id="btn">Login</button>
+            </div>
+        </form>
+        <div class="alert"></div>
+        </div>
+        <script >
+            const href = window.location.href;
+            const base_url = href.replace(window.location.pathname, '/');
+            const container = document.getElementsByClassName("container");
+            const alert = document.getElementsByClassName("alert");
+            const btn = document.getElementById("btn");
+            const check = document.getElementsByClassName("check");
+            btn.addEventListener("click", (e) =>{
+                e.preventDefault()
+                let formData = {
+                    email: document.getElementById('email').value,
+                    pwd: document.getElementById('pwd').value,
+                }
+                if(formData.email.length < 6){
+                    alert[0].innerHTML = "<p>Sorry, but your email seems to be incorrect.</p>"
+                }    
+                else if(formData.pwd.length < 4){
+                    alert[0].innerHTML = "<p>Sorry, but password has to have more then 3 characters.</p>"
+                }
+                else{
+                    const body = formData;
+                    fetch(base_url+'login', {
+                            method: 'post',
+                            body:    JSON.stringify(body),
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                        .then(res => {
+                            if(res.status==200){
+                                return res.json();
+                            }else if(res.status==403) {
+                                console.log('zly email');
+                                alert[0].innerHTML = "<p>Przykro mi, ale taki użytkownik nie jest jeszcze zarejestrowany</p>"
+                            }else if(res.status==401) {
+                                console.log('zly password');
+                                alert[0].innerHTML = "<p>Przykro mi, ale hasło jest niewłaściwe</p>"
+                            }else{
+                                console.log('problem z serwerem');
+                                window.location.replace(base_url+'home');
+                            }
+                        })
+                        .then(res => {
+                            localStorage.setItem('badanie_funkcji_hamowania', JSON.stringify(res));
+                            window.location.replace(base_url+`ankieta?hs=${res.hash}&ep=${res.exp}&id=${res.id}`)
+                        }).catch(err => console.log(err));}
+            })
+</script>
+</body>
+</html>

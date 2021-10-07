@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test sortowania kart z Wisconsin</title>
+    <style>
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-container1 {
+          display: grid;
+          grid-template-columns: auto auto auto auto;
+          background-color: #ebf0f3;
+          padding: 0px;
+        }
+        .grid-item {
+          background-color: rgba(255, 255, 255, 0.8);
+          border: 0px solid rgba(255, 255, 255, 0.479);
+          padding: 0px;
+          font-size: 30px;
+          text-align: center;
+        }
+        .container {
+        margin-top: 15pt;
+        margin-left: 15%;
+        margin-right: 15%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 15px;
+        background: rgb(255, 255, 255);
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+       button:hover {
+        background: dodgerblue;
+        color: rgb(217, 225, 236);
+        }
+    </style>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container" id="cont">
+        <h2>Test Sortowania Kart z Wisconsin</h2>
+        <p>Test Sortowania Kart z Wisconsin służy do pomiaru funkcji wykonawczych rozumianych jako funkcje nadzorcze, kontrolujące i kierujące poznawczą aktywnością człowieka.</p>
+        <p>W wersji oryginalnej składa się z dwóch talii liczących po 64 karty. Zadanie osoby badanej polega na dopasowaniu każdej karty z talii do jednej z czterech kart wzorcowych. Badany musi sam określić regułę sortowania, wykorzystując otrzymywaną po każdej reakcji informację, czy jego odpowiedź była dobra, czy zła.</p>
+        <p>W prezentowanej tu wersji skróconej talia składa się z 24 kart, które prezentowane są w sposób losowy. Reguła zmienia się, jeśli badany 4 do 6 razy prawidłowo dobierze kartę. Test kończy się po sześciu zmianach reguły, tzn. dwukrotnie regułą jest kolor, dwukrotnie kształt i dwukrotnie liczba elementów na karcie. Średnio czas potrzebny na wykonie testu to ok. 2 minuty. Rejestrowany jest czas oraz ilość popełnianych błędów. </p>
+        <p>Przed przystąpieniem do wykonania właściwego testu można skorzystać z testu treningowego.</p>
+        <p>W teście treningowym ilość powtórzeń jest nieograniczona. Jeśli uznasz, że właściwie zrozumiałeś reguły, zakończ trening i przystąp do właściwego testu. </p>
+        <p>Test właściwy można wykonywać tylko raz.  </p>
+        <p></p>
+        <br>
+        <br>
+        <form role="form">
+            <div class="form-group">
+                <button class="btn" type="submit" id="btnProba">Przystąp do testu próbnego</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        const str = window.location.href;
+        let st = str.lastIndexOf('/')
+        let end = str.indexOf('?')
+        let base = str.slice(0, st);
+        let query = str.slice(end);
+        const gifName = ["GreenTriangle3.gif", "GreenTriangle4.gif", "YellowTriangle2.gif", "YellowTriangle4.gif", 
+      "BlueTriangle2.gif", "BlueTriangle3.gif", "RedStar3.gif", "RedStar4.gif",
+      "YellowStar1.gif", "YellowStar4.gif", "BlueStar1.gif", "BlueStar3.gif", "RedCross2.gif", "RedCross4.gif",
+      "GreenCross1.gif", "GreenCross4.gif", "BlueCross1.gif", "BlueCross2.gif", 
+      "RedCircle2.gif", "RedCircle3.gif", "GreenCircle1.gif","GreenCircle3.gif","YellowCircle1.gif","YellowCircle2.gif"];
+      const gifSymbol = ['aac', 'aad', 'bab', 'bad',
+      'cab', 'cac', 'ddc', 'ddd', 
+      'bda', 'bdd', 'cda', 'cdc', 'dcb', 'dcd',
+      'aca', 'acd','cca', 'ccb',
+      'dbb', 'dbc', 'aba', 'abc', 'bba', 'bbb'];
+      const myInnerHTML = `<form role="form">
+        <div class="form-group">
+            <button class="btn" id="btnTest">Rozpocznij Test Właściwy</button>
+        </div>
+    </form>
+    <div class="grid-container">
+        <div class="grid-item"><img id = "gif"src="./redtriangle1_test.gif" height = "80%"></div>
+    </div>
+    <h1 style="color: rgb(255, 255, 255); text-align: center;" id="komunikat" >Dobrze</h1>
+    <div class="grid-container1">
+        <div class="grid-item" id="daa" onclick="getId(this)"><img src="./redtriangle1_test.gif"  height = "80%"></div>
+        <div class="grid-item" id="adb" onclick="getId(this)"><img src="./greenstar2_test.gif" height = "80%"></div>
+        <div class="grid-item" id="bcc" onclick="getId(this)"><img src="./yellowcross3_test.gif" height = "80%"></div>  
+        <div class="grid-item" id="cbd" onclick="getId(this)"><img src="./bluecircle4_test.gif" height = "80%"></div>
+    </div>`
+    let gifIndex  = Math.floor(Math.random() * 24);
+    const getId = (karta)=>{
+          if(zgodnoscReguly(regula[sekwencja[aktualnyRegula][0]], gifIndex, karta.id)){
+              licznikTrafiony++;
+              if(licznikTrafiony > sekwencja[aktualnyRegula][1]){
+                  licznikTrafiony = 0;
+                  licznikSekwencja++;
+                  aktualnyRegula++;
+                  if(aktualnyRegula == 6){
+                      aktualnyRegula = 0;
+                  }
+             }
+              komunikat.style="color: rgb(15, 238, 23); text-align: center;" 
+              komunikat.innerText = "Dobrze";
+          }else{
+              licznikTrafiony = 0;
+              licznikBlad++;
+              komunikat.style="color: rgb(248, 62, 37); text-align: center;"
+              komunikat.innerText = "Błąd";
+          }
+          gifIndex  = Math.floor(Math.random() * 24);
+          gif.src = "./"+gifName[gifIndex];
+      }
+      const regula = {color:0, ksztalt:1, liczba:2};
+      const sekwencja = [['color', 3], ['ksztalt', 4], ['color', 3],['liczba', 5], ['ksztalt', 4], ['liczba', 5]];
+      let licznikTrafiony = 0;
+      let licznikSekwencja = 0;
+      let licznikBlad = 0;
+      let aktualnyRegula = Math.floor(Math.random() * 6);
+      const zgodnoscReguly=(regula, index, karta)=>{
+          return (gifSymbol[index][regula]==karta[regula]) ? true : false;
+      }
+    document.getElementById('btnProba').addEventListener("click", (e) =>{
+        e.preventDefault()
+        document.getElementById('cont').innerHTML = myInnerHTML;
+        const gif = document.getElementById("gif");
+        const komunikat = document.getElementById("komunikat");
+        gif.src = "./"+gifName[gifIndex];
+        const btnTest = document.getElementById("btnTest");
+        btnTest.addEventListener("click", (e) =>{
+            e.preventDefault();
+            window.location.replace(base+ '/wisconsint'+query);
+        });
+    })
+    </script>
+</body>
+</html>

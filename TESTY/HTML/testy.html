@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+        .container {
+        margin: 100px;
+        margin-right: 30%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 25px;
+        background: #fff;
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+        .name {
+        font-size: large;
+        color: rgb(4, 65, 85);
+        }
+        .name:hover {
+        background: dodgerblue;
+        }
+        button:hover {
+        background: dodgerblue;
+        color: #fff;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badanie Funkcji Hamowania</title>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container">
+        <h1>Badanie Funkcji Hamowania testem Stroop'a i Sortowania Kart z Wisconsin</h1>
+        <form role="form">
+            <div class="form-group">
+                <button class="btn" type="submit" id="btnWis">Test Wisconsin</button>
+            </div>
+            <div class="form-group">
+                <button class="btn" type="submit" id="btnStr">Test Stroop'a</button>
+            </div>
+        </form>
+        <div class="alert"></div>
+        </div>
+        <script >
+            const str = window.location.href;
+            let st = str.lastIndexOf('/')
+            let end = str.indexOf('?')
+            let base = str.slice(0, st);
+            let query = str.slice(end);
+            const container = document.getElementsByClassName("container");
+            const alert = document.getElementsByClassName("alert");
+            const btnWis = document.getElementById("btnWis");
+            const btnStr = document.getElementById("btnStr");
+            btnWis.addEventListener("click", (e) =>{
+                e.preventDefault();
+                window.location.replace(base+ '/wisconsinp'+query);
+            });
+            btnStr.addEventListener("click", (e) =>{
+                e.preventDefault();
+                window.location.replace(base+'/stroop_1'+query);
+            });
+        </script>
+</body>
+</html>

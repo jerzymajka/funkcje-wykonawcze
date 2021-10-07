@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .container {
+        margin: 100px;
+        margin-right: 30%;
+        }
+        .form-group {
+        margin: 10px;
+        }
+        .alert {
+        color: red;
+        }
+        .in {
+        width: 50%;
+        border: solid 1px #eee;
+        padding: 15px 10px;
+        }
+        .btn {
+        width: 200px;
+        padding: 15px;
+        margin: 25px;
+        background: #fff;
+        color: dodgerblue;
+        border: solid 1px dodgerblue;
+        cursor: pointer;
+        transition: all 0.38s ease-in-out;
+        }
+        .name {
+        font-size: large;
+        color: rgb(4, 65, 85);
+        }
+        .name:hover {
+        background: dodgerblue;
+        }
+        button:hover {
+        background: dodgerblue;
+        color: #fff;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankieta</title>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container">
+        <h2>Ankieta</h2>
+        <h4>W celu wzięcia udziału w badaniu wypełnij poniższą ankitę.</h4>
+        <form role="form">
+            <div class="form-group">
+                <label for="plec">Płeć: </label>
+                <select name="plec" id="plec">
+                  <option value="kobieta">Kobieta</option>
+                  <option value="mezczyzna">Mężczyzna </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="wiek">Wiek:</label>
+                <select name="wiek" id="wiek">
+                    <option value="a">Między 18 a 25 lat</option>
+                    <option value="b">Między 25 a 35 lat</option>
+                    <option value="c">Między 35 a 50 lat</option>
+                    <option value="d">Między 50 a 70 lat</option>
+                    <option value="e">Powyżej 70 lat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="wyksztalcenie">Wykształcenie:</label>
+                <select name="wyksztalcenie" id="wyksztalcenie">
+                    <option value="pod">Podstawowe</option>
+                    <option value="zaw">Zawodowe</option>
+                    <option value="sre">Średnie</option>
+                    <option value="wyz">Wyższe</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nalog">Okres uzależnienia:</label>
+                <select name="nalog" id="nalog">
+                    <option value="n">Nie dotyczy</option>
+                    <option value="a">Mniej niż pół roku</option>
+                    <option value="b">Między pół roku a rok</option>
+                    <option value="c">Między 1 a 2 lata</option>
+                    <option value="d">Między 2 a 5 lat</option>
+                    <option value="e">Między 5 a 10 lat</option>
+                    <option value="f">Powyżej 10 lat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="abstyn">Okres abstynencji:</label>
+                <select name="abstyn" id="abstyn">
+                    <option value="n">Nie dotyczy</option>
+                    <option value="a">Mniej niż pół roku</option>
+                    <option value="b">Między pół roku a rok</option>
+                    <option value="c">Między 1 a 2 lata</option>
+                    <option value="d">Między 2 a 5 lat</option>
+                    <option value="e">Między 5 a 10 lat</option>
+                    <option value="f">Powyżej 10 lat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn" type="submit" id="btn">Gotowe</button>
+            </div>
+        </form>
+        <div class="alert"></div>
+        </div>
+        <script >
+            const href = window.location.href;
+            const container = document.getElementsByClassName("container");
+            const alert = document.getElementsByClassName("alert");
+            const btn = document.getElementById("btn");
+            const check = document.getElementsByClassName("check");
+            btn.addEventListener("click", (e) =>{
+                e.preventDefault()
+                let formData = {
+                    plec: document.getElementById('plec').value,
+                    wiek: document.getElementById('wiek').value,
+                    wyksztalcenie: document.getElementById('wyksztalcenie').value,
+                    nalog: document.getElementById('nalog').value,
+                    abstyn: document.getElementById('abstyn').value
+                }
+                    const body = formData;
+                    fetch(href, {
+                            method: 'post',
+                            body:    JSON.stringify(body),
+                            headers: { 'Content-Type': 'application/json' },
+                        }).then(res => {
+                            if(res.status==200){
+                                window.location.replace(href)
+                            }else{
+                                console.log('problem z serwerem');
+                                window('problem z serwerem');
+                            }
+                        }).catch(err => console.log(err));}
+            )
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+        .container {
+  margin: 100px;
+  margin-right: 30%;
+}
+.form-group {
+  margin: 10px;
+}
+.alert {
+  color: red;
+}
+.in {
+  width: 50%;
+  border: solid 1px #eee;
+  padding: 15px 10px;
+}
+.btn {
+  width: 200px;
+  padding: 15px;
+  margin: 25px;
+  background: #fff;
+  color: dodgerblue;
+  border: solid 1px dodgerblue;
+  cursor: pointer;
+  transition: all 0.38s ease-in-out;
+}
+.name {
+  font-size: large;
+  color: rgb(4, 65, 85);
+}
+.name:hover {
+  background: dodgerblue;
+}
+button:hover {
+  background: dodgerblue;
+  color: #fff;
+}
+
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badanie Funkcji Hamowania</title>
+</head>
+<body>
+    <a href="home">home</a>
+    <div class="container">
+        <h2>Badanie Funkcji Hamowania testem Stroop'a i Sortowania Kart z Wisconsin</h2>
+        <h4>W celu wzięcia udziału w badaniu stwórz swoje nowe konto.</h4>
+        <h4>Podaj nazwę użytkownika (może być e-mail) i hasło, którym będzisz się posługiwać, logując się na swoje konto.</h4>
+        <form role="form">
+            <div class="form-group">
+                <input class="in" type="email" name="email" id="email" placeholder="E-mail" required>
+            </div>
+            <div class="form-group">
+                <input class="in" type="password" name="pwd" id="pwd" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" class = "check">Wyrażam zgodę na wzięcie udziłu w badaniu</input>
+            </div>
+            <div class="form-group">
+                <button class="btn" type="submit" id="btn">Signup</button>
+            </div>
+        </form>
+        <div class="alert"></div>
+        </div>
+        <script >
+            const href = window.location.href;
+            const base_url = href.replace(window.location.pathname, '/');
+            const container = document.getElementsByClassName("container");
+            const alert = document.getElementsByClassName("alert");
+            const btn = document.getElementById("btn");
+            const check = document.getElementsByClassName("check");
+            btn.addEventListener("click", (e) =>{
+                e.preventDefault()
+                let formData = {
+                    email: document.getElementById('email').value,
+                    pwd: document.getElementById('pwd').value,
+                }
+                if(formData.email.length < 6){
+                    alert[0].innerHTML = "<p>Przykro mi, ale nazwa użytkownika musi zawierć przynajmniej 6 znaków</p>"
+                }    
+                else if(formData.pwd.length < 4){
+                    alert[0].innerHTML = "<p>Przykro mi, ale hasło musi zawierć przynajmniej 4 znaki</p>"
+                }
+                else if(!check[0].checked){
+                    alert[0].innerHTML = "<p>Przykro mi, ale musisz zaznaczyć zgodę na udział w badaniu.</p>"
+                }
+                else{
+                    const body = formData;
+                    fetch(base_url+'signup', {
+                            method: 'post',
+                            body:    JSON.stringify(body),
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                        .then(res => {
+                            console.log(res.status)
+                            if(res.status==200){
+                                window.location.replace(base_url+'login')
+                            }else if(res.status==403) {
+                                console.log('zly email');
+                                alert[0].innerHTML = "<p>Przykro mi, ale taki użytkownik już istnieje</p>"
+                            }else{
+                                console.log('problem z serwerem');
+                                window.location.replace(base_url);
+                            }
+                        }).catch(err => console.log(err));}
+            })
+</script>
+</body>
+</html>
